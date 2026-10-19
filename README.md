@@ -207,3 +207,23 @@ npm run build
 ## 许可证
 
 MIT License
+
+## 课程作业与二次开发说明
+
+本项目基于开源原型二次开发，用于课程小组协作、需求分析、系统设计、编码实现与测试实践。
+
+- 上游原型：[Jruing/SmartHire](https://github.com/Jruing/SmartHire)。
+- 已记录的原始版本：`85b8fe0`，来源说明保留在 [UPSTREAM.md](UPSTREAM.md)。
+- 个人仓库：[Small-White1339/NewRepo](https://github.com/Small-White1339/NewRepo)，继续保留。
+- 小组组织仓库：[kechengzuoye/NewRepo](https://github.com/kechengzuoye/NewRepo)。
+- 迁移方式：复制代码和 Git 提交历史到组织仓库，保留原作者代码与 README；两份仓库后续不会自动同步。
+
+### 分支约定
+
+- `main`：保存可演示、可交付的稳定版本。
+- `dev`：小组日常开发与集成分支。
+- 功能开发可从 `dev` 创建 `feature/<功能名>` 分支，经 Pull Request 评审后合并；阶段版本通过 Pull Request 从 `dev` 合入 `main`。
+
+### 许可证保留情况
+
+原 README 标注为 `MIT License`。经检查，已记录的上游版本及上游默认分支均未提供独立的 LICENSE 文件；本仓库保留原许可声明，不代替原作者补写授权或版权信息。独立 LICENSE 文件待从原作者处取得后按原文补充。
