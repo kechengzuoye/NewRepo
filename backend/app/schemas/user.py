@@ -5,10 +5,14 @@ from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field
 
+from app.models.user import UserRole
+
 # ---------- Request Schemas ----------
+
 
 class UserRegisterRequest(BaseModel):
     """User registration request body."""
+
     username: str = Field(..., min_length=3, max_length=50, description="Unique username")
     email: EmailStr = Field(..., description="User email address")
     password: str = Field(..., min_length=6, max_length=128, description="Password (plain text)")
@@ -17,20 +21,25 @@ class UserRegisterRequest(BaseModel):
 
 class UserLoginRequest(BaseModel):
     """User login request body."""
+
     username: str = Field(..., description="Username")
     password: str = Field(..., description="Password (plain text)")
+    role: UserRole | None = None
 
 
 class UserUpdateRequest(BaseModel):
     """User profile update request body."""
+
     username: str | None = Field(None, min_length=3, max_length=50)
     email: EmailStr | None = None
 
 
 # ---------- Response Schemas ----------
 
+
 class UserResponse(BaseModel):
     """User detail response."""
+
     id: UUID
     username: str
     email: str
@@ -44,6 +53,7 @@ class UserResponse(BaseModel):
 
 class TokenResponse(BaseModel):
     """JWT token response."""
+
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
@@ -51,6 +61,7 @@ class TokenResponse(BaseModel):
 
 class TokenPayload(BaseModel):
     """JWT token payload."""
+
     sub: str  # user_id
     exp: int
     type: str = "access"
