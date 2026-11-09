@@ -49,7 +49,7 @@ export default function Register() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">注册账号</CardTitle>
-          <CardDescription>加入 SmartHire 智能招聘</CardDescription>
+          <CardDescription>创建账号，选择招聘人员或求职者角色</CardDescription>
         </CardHeader>
         <CardContent>
           {error && (

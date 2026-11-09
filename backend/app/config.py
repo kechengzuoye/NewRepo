@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     DEEPSEEK_API_KEY: str = ""
     DEEPSEEK_API_BASE: str = "https://api.deepseek.com/v1"
 
-    APP_NAME: str = "SmartHire"
+    APP_NAME: str = "招聘与求职辅助系统"
     DEBUG: bool = False
 
     CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:5173"]

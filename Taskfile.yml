@@ -72,7 +72,7 @@ tasks:
   backend:shell:
     desc: 打开 Python shell（带应用上下文）
     dir: "{{.BACKEND_DIR}}"
-    cmd: uv run python -c "from app.models import User, Resume, Job, MatchReport; print('SmartHire shell ready')"
+    cmd: uv run python -c "from app.models import User, Resume, Job, MatchReport; print('招聘与求职辅助系统开发环境已就绪')"
 
   # ── 前端 ──
 

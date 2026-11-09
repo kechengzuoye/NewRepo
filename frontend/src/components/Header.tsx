@@ -24,7 +24,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
       </Button>
       <div className="flex-1">
         <h1 className="text-base font-semibold text-foreground">
-          SmartHire 智能招聘辅助系统
+          招聘与求职辅助系统
         </h1>
       </div>
       <div className="flex items-center gap-2">
