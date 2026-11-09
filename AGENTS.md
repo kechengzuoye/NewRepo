@@ -1,4 +1,4 @@
-# SmartHire — Agent Guide
+# 招聘与求职辅助系统 — Agent Guide
 
 ## Repo structure
 

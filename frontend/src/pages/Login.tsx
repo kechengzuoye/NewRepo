@@ -45,8 +45,8 @@ export default function Login() {
 
       <Card className="w-full max-w-sm animate-fade-in bg-white/70 backdrop-blur-xl dark:bg-black/50">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">SmartHire</CardTitle>
-          <CardDescription>智能招聘辅助系统</CardDescription>
+          <CardTitle className="text-2xl">招聘与求职辅助系统</CardTitle>
+          <CardDescription>请登录你的账号</CardDescription>
         </CardHeader>
         <CardContent>
           {error && (

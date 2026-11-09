@@ -1,4 +1,4 @@
-﻿"""所有 SmartHire Agent 的基类，集成 LLM。"""
+﻿"""系统内所有 Agent 的基类，集成 LLM。"""
 
 import json
 import re

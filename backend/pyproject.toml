@@ -1,7 +1,7 @@
 [project]
 name = "smarthire-backend"
 version = "0.1.0"
-description = "SmartHire - AI-powered recruitment assistant system"
+description = "AI assistant for recruitment and job seeking"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.115.0",

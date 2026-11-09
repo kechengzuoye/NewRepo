@@ -36,7 +36,7 @@ export default function Dashboard() {
           欢迎回来，{user?.username}
         </h2>
         <p className="text-muted-foreground mt-1">
-          这是你的 SmartHire 智能招聘辅助系统仪表盘
+          在这里查看岗位、简历和匹配概况
         </p>
       </div>
 

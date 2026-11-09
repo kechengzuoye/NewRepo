@@ -24,9 +24,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     <aside className="flex h-full flex-col gap-2 border-r bg-sidebar p-3">
       <div className="flex items-center gap-2 px-2 py-3">
         <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
-          SH
+          职
         </div>
-        <span className="text-base font-semibold text-sidebar-foreground">SmartHire</span>
+        <span className="text-base font-semibold text-sidebar-foreground">招聘与求职辅助系统</span>
       </div>
       <nav className="flex flex-col gap-1">
         {navItems.map((item) => (
