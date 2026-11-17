@@ -1,0 +1,66 @@
+﻿用例编号,被测对象,输入维度,设计方法,等价类或边界值,输入摘要,期望结果,实际结果,结论
+U01,U 简历上传,A1 身份与令牌,等价类-无效,未认证用户（无 Authorization 头）,不带令牌上传 a.txt,401；Not authenticated,401 Not authenticated,通过
+U02,U 简历上传,A1 身份与令牌,等价类-无效,令牌格式非法（并非 JWT）,Bearer not-a-jwt 上传 a.txt,401；Invalid token,401 Invalid token,通过
+U03,U 简历上传,A1 身份与令牌,等价类-无效,令牌类型错误（刷新令牌不能当访问令牌）,用 login 返回的 refresh_token 上传 a.txt,401；Invalid token,401 Invalid token,通过
+U04,U 简历上传,A1 身份与令牌,等价类-有效,已登录 HR 账号,HR 令牌上传 a.txt,201；status=PARSED,"201 {'id': '90bfd114-c86a-4197-8bbe-a416a3751f2c', 'title': 'a.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜status=PARSED",通过
+U05,U 简历上传,A1 身份与令牌,等价类-有效,已登录求职者账号（上传不限角色）,JOB_SEEKER 令牌上传 a.txt,201；status=PARSED,"201 {'id': '44eaf488-2bb6-4318-a157-5e00ac7f7900', 'title': 'a.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜status=PARSED",通过
+U06,U 简历上传,A2 请求体结构,错误推测,非 multipart 请求（JSON 体）,"POST JSON {""file"":""x""}",422；缺少 file 字段,422 body.file: Field required,通过
+U07,U 简历上传,A2 请求体结构,错误推测,文件字段名错误,字段名用 document 而非 file,422；缺少 file 字段,422 body.file: Field required,通过
+U08,U 简历上传,A2 请求体结构,错误推测,文件名为空（退化为普通表单字段）,"filename="""" 上传内容 hello",422；缺少 file 字段,"422 body.file: Value error, Expected UploadFile, received: <class 'str'>",通过
+U09,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .txt,a.txt 文本内容,201；PARSED,"201 {'id': '56bc2549-199e-4092-ad31-7582f042c0f5', 'title': 'a.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}",通过
+U10,U 简历上传,A3 文件扩展名,等价类-有效,大写扩展名（应统一转小写）,a.TXT 文本内容,201；PARSED,"201 {'id': '48e3287c-d463-4f9a-8603-8e1d299aaf24', 'title': 'a.TXT', 'status': 'PARSED', 'message': '文字已识别并保存。'}",通过
+U11,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .md,a.md 文本内容,201；PARSED,"201 {'id': '968a97ff-475f-4e2d-811e-e08673a38ab5', 'title': 'a.md', 'status': 'PARSED', 'message': '文字已识别并保存。'}",通过
+U12,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .markdown,a.markdown 文本内容,201；PARSED,"201 {'id': '4318694a-df1d-4911-bba7-b16b77d8e61b', 'title': 'a.markdown', 'status': 'PARSED', 'message': '文字已识别并保存。'}",通过
+U13,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .pdf（内容为真实可解析 PDF）,ok.pdf,201；PARSED,"201 {'id': 'af8dc395-92a6-46a2-873a-cc3dec64889d', 'title': 'ok.pdf', 'status': 'PARSED', 'message': '文字已识别并保存。'}",通过
+U14,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .docx（内容为真实 Word 文档）,ok.docx,201；PARSED,"201 {'id': '90036d7a-20af-4db6-a39d-802bfd1b9fca', 'title': 'ok.docx', 'status': 'PARSED', 'message': '文字已识别并保存。'}",通过
+U15,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .png（真实含文字图片，走本地 OCR）,text.png 1400×200 含英文文字,201；原文非空,"201 {'id': 'b7be83bf-0711-48a0-85b7-de4ddd60e5dc', 'title': 'text.png', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜原文长度=25",通过
+U16,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .jpg（内容合法但无文字）,blank.jpg 800×120 空白图,422；未识别到文字（说明格式已验证通过）,422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。,通过
+U17,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .jpeg（内容合法但无文字）,blank.jpeg 800×120 空白图,422；未识别到文字,422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。,通过
+U18,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .webp（内容合法但无文字）,blank.webp 800×120 空白图,422；未识别到文字,422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。,通过
+U19,U 简历上传,A3 文件扩展名,等价类-有效,白名单 .bmp（内容合法但无文字）,blank.bmp 800×120 空白图,422；未识别到文字,422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。,通过
+U20,U 简历上传,A3 文件扩展名,等价类-无效,老版 Word 不在白名单,a.doc,400；Unsupported file type,"400 Unsupported file type '.doc'. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg",通过
+U21,U 简历上传,A3 文件扩展名,等价类-无效,可执行文件不在白名单,a.exe,400；Unsupported file type,"400 Unsupported file type '.exe'. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg",通过
+U22,U 简历上传,A3 文件扩展名,等价类-无效,表格文件不在白名单,a.csv,400；Unsupported file type,"400 Unsupported file type '.csv'. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg",通过
+U23,U 简历上传,A3 文件扩展名,边界值-无效,无扩展名,resume（无点号后缀）,400；Unsupported file type '',"400 Unsupported file type ''. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg",通过
+U24,U 简历上传,A3 文件扩展名,边界值-无效,只有点号、没有主名,.txt,400；Unsupported file type '',"400 Unsupported file type ''. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg",通过
+U25,U 简历上传,A3 文件扩展名,边界值-无效,扩展名带尾随空格,"""a.txt ""（末尾一个空格）",400；Unsupported file type '.txt ',"400 Unsupported file type '.txt '. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg",通过
+U26,U 简历上传,A4 文件大小,边界值-下界,0 字节空文件,empty.txt 0 字节,422；未识别到文字,422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。,通过
+U27,U 简历上传,A4 文件大小,边界值-下界,1 字节最小非空文件,"one.txt 内容 ""a""",201；PARSED,"201 {'id': 'a212838a-65a0-4556-b06a-7eb64a295849', 'title': 'one.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}",通过
+U28,U 简历上传,A4 文件大小,错误推测,只有空白的文本（不可作为简历正文）,space.txt 内容为空格换行制表符,422；未识别到文字,422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。,通过
+U29,U 简历上传,A4 文件大小,边界值-上界,恰好 10 MB（10 485 760 字节）,exact10m.txt 10 MB,201；PARSED,"201 {'id': 'b829326c-dc96-4082-831b-de2f4acd1691', 'title': 'exact10m.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜字节=10485760",通过
+U30,U 简历上传,A4 文件大小,边界值-越界,10 MB + 1 字节,over10m.txt 10 485 761 字节,413；File too large,413 File too large. Maximum size is 10 MB｜字节=10485761,通过
+U31,U 简历上传,A5 文件名,边界值-上界,文件名长度恰好 255 字符,"""n""×251 + "".txt""",201；标题完整保留 255 字符,"201 {'id': '7cb61b2d-2bf6-476e-8042-01d762f1fcec', 'title': 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn｜标题长度=255",通过
+U32,U 简历上传,A5 文件名,边界值-越界,文件名长度 256 字符,"""n""×252 + "".txt""",400；Invalid filename,400 Invalid filename,通过
+U33,U 简历上传,A5 文件名,等价类-无效,文件名含控制字符（需手工构造 multipart）,"filename=""bad\x01name.txt""",400；Invalid filename,400 Invalid filename,通过
+U34,U 简历上传,A5 文件名,错误推测,路径穿越文件名,"""..\\..\\escape.txt""",201；标题归一为 escape.txt，文件不逃逸上传目录,"201 {'id': '28e01dfa-43fa-45c2-9756-cd2fb5c2b1cf', 'title': 'escape.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜标题=escape.txt；目录外文件=False",通过
+U35,U 简历上传,A5 文件名,错误推测,绝对路径文件名,"""C:\\Windows\\abs.txt""",201；标题归一为 abs.txt,"201 {'id': '459fe50a-5044-459c-b48a-3a695904650a', 'title': 'abs.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜标题=abs.txt",通过
+U36,U 简历上传,A5 文件名,等价类-有效,中文文件名,中文简历.txt,201；标题保留中文名,"201 {'id': 'c7f9f2da-f9c7-4bae-a706-2f0ca68409ff', 'title': '中文简历.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜标题=中文简历.txt",通过
+U37,U 简历上传,A6 图片内容与像素,边界值-上界,恰好 2500 万像素（5000×5000）,limit.png 空白,422；未识别到文字（说明像素校验通过）,422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。｜像素=25000000,通过
+U38,U 简历上传,A6 图片内容与像素,边界值-越界,2500 万 + 1 像素（5000×5001）,over.png 空白,422；提示分辨率过大,422 简历解析失败：Failed to parse file: 图片分辨率过大，请缩小至 2500 万像素以内。｜像素=25005000,通过
+U39,U 简历上传,A6 图片内容与像素,错误推测,扩展名合法但内容损坏,broken.jpg 内容为文本,422；图片损坏,422 简历解析失败：Failed to parse file: 图片损坏或文件内容并非有效图片。,通过
+U40,U 简历上传,A6 图片内容与像素,错误推测,真实格式不在支持集合（GIF 改 .png 后缀）,renamed.png 实为 GIF,422；图片格式不受支持,422 简历解析失败：Failed to parse file: 图片格式不受支持。,通过
+U41,U 简历上传,A7 可见后置条件,等价类-有效,上传成功后记录可见,上传 visible.txt 后查询简历列表,201 且列表含该记录，标题与状态正确,"201 {'id': '89d99af6-d465-4eaf-a066-99b8f01f58d3', 'title': 'visible.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜列表命中=True；状态=PARSED",通过
+U42,U 简历上传,A7 可见后置条件,错误推测,同名文件重复上传,同一文件名上传两次,201 两次；两条独立记录，ID 不同,"201 {'id': '7cdf166a-bae6-465e-b6bc-fd1d57e1d945', 'title': 'same.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜同名记录数=2；ID 不同=True",通过
+U43,U 简历上传,A7 可见后置条件,错误推测,解析失败的上传不落库、不残留文件,上传无法解析的 bad.pdf,422；记录数与上传目录文件数均不变,422 简历解析失败：Failed to parse file: EOF marker not found｜记录 17→17；文件 18→18,通过
+B01,B 账号认证,B1 用户名长度,边界值-下界,用户名 2 字符（下限 -1）,"username=""ab""",422；用户名至少 3 字符,422 body.username: String should have at least 3 characters,通过
+B02,B 账号认证,B1 用户名长度,边界值-下界,用户名 3 字符（下限）,"username=""b02""",201；注册成功,"201 {'id': 'fab5aa36-d978-462f-ac35-e65fa0972f79', 'username': 'b02', 'email': 'b02@bbmail.com', 'role': 'HR', 'is_active':",通过
+B03,B 账号认证,B1 用户名长度,边界值-上界,用户名 50 字符（上限）,"""u""×50",201；注册成功,"201 {'id': 'e809a77d-bd32-46c3-b451-998d26af9716', 'username': 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu', 'email'｜用户名长度=50",通过
+B04,B 账号认证,B1 用户名长度,边界值-越界,用户名 51 字符（上限 +1）,"""u""×51",422；用户名最多 50 字符,422 body.username: String should have at most 50 characters,通过
+B05,B 账号认证,B2 密码长度,边界值-下界,密码 5 字符（下限 -1）,"password=""abcde""",422；密码至少 6 字符,422 body.password: String should have at least 6 characters,通过
+B06,B 账号认证,B2 密码长度,边界值-下界,密码 6 字符（下限）,"password=""abcdef""",201；注册成功,"201 {'id': 'f1ddc15d-09bc-45a4-bcdc-9dcec896c95d', 'username': 'b06user', 'email': 'b06@bbmail.com', 'role': 'HR', 'is_activ",通过
+B07,B 账号认证,B2 密码长度,边界值-上界,密码 128 字符（上限）,"""p""×128",201；注册成功,"201 {'id': 'e6d61906-9024-496f-a248-1b740ad86aac', 'username': 'b07user', 'email': 'b07@bbmail.com', 'role': 'HR', 'is_activ｜密码长度=128",通过
+B08,B 账号认证,B2 密码长度,边界值-越界,密码 129 字符（上限 +1）,"""p""×129",422；密码最多 128 字符,422 body.password: String should have at most 128 characters,通过
+B09,B 账号认证,B3 邮箱格式,等价类-无效,缺少 @ 的邮箱,"""not-an-email""",422；邮箱格式非法,422 body.email: value is not a valid email address: An email address must have an @-sign.,通过
+B10,B 账号认证,B3 邮箱格式,等价类-无效,只有 @ 没有域名,"""b10@""",422；邮箱格式非法,422 body.email: value is not a valid email address: There must be something after the @-sign.,通过
+B11,B 账号认证,B4 角色枚举,等价类-无效,不存在的角色,"role=""ADMIN""",422；角色只能是 HR 或 JOB_SEEKER,422 body.role: String should match pattern '^(HR|JOB_SEEKER)$',通过
+B12,B 账号认证,B4 角色枚举,等价类-无效,小写角色（枚举区分大小写）,"role=""hr""",422；角色只能是 HR 或 JOB_SEEKER,422 body.role: String should match pattern '^(HR|JOB_SEEKER)$',通过
+B13,B 账号认证,B4 角色枚举,等价类-有效,省略角色（取默认值）,不传 role 字段,201；role=JOB_SEEKER,"201 {'id': 'e7c21678-4569-4ada-a461-170293fe7412', 'username': 'b13user', 'email': 'b13@bbmail.com', 'role': 'JOB_SEEKER', '｜role=JOB_SEEKER",通过
+B14,B 账号认证,B5 唯一性,等价类-无效,用户名已被占用,重复注册同名账号 b14dup,409；Username already taken,409 Username already taken,通过
+B15,B 账号认证,B5 唯一性,等价类-无效,邮箱已被注册,两个用户名使用同一邮箱,409；Email already registered,409 Email already registered,通过
+B16,B 账号认证,B6 必填字段,错误推测,只提供用户名,请求体缺 email 与 password,422；提示 email、password 必填,422 body.email: Field required；body.password: Field required,通过
+B17,B 账号认证,B7 登录凭证,等价类-有效,正确的用户名与密码,用已注册账号登录,200；返回 access/refresh 令牌，token_type=bearer,200 {'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZGZiZjljOS1jMzIzLTRjZTEtYjkwZi1hN2U4MTNlOWYyZDYiLCJle｜token_type=bearer,通过
+B18,B 账号认证,B7 登录凭证,等价类-无效,密码错误,bb_hr + wrong-password,401；Invalid username or password,401 Invalid username or password,通过
+B19,B 账号认证,B7 登录凭证,等价类-无效,账号不存在,ghost_user + 任意密码,401；Invalid username or password,401 Invalid username or password,通过
+B20,B 账号认证,B7 登录凭证,等价类-无效,用户名大小写不同,BB_HR + 正确密码,401；用户名区分大小写,401 Invalid username or password,通过
+B21,B 账号认证,B7 登录凭证,等价类-无效,账号已停用,停用后使用正确密码登录,403；Account is deactivated,403 Account is deactivated,通过
+B22,B 账号认证,B8 登录必填,错误推测,登录缺少密码,"{""username"":""bb_hr""}",422；提示 password 必填,422 body.password: Field required,通过

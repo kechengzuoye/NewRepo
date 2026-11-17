@@ -1,0 +1,99 @@
+==============================================================================
+SmartHire 黑盒测试
+==============================================================================
+Python        : 3.13.9
+被测服务      : FastAPI 应用（ASGI 传输，与真实 HTTP 请求同一路由与校验）
+数据库        : 独立临时 SQLite  C:\Users\chen2\Downloads\work space 2\黑盒\_run\blackbox.db
+上传目录      : C:\Users\chen2\Downloads\work space 2\黑盒\_run\uploads
+单文件上限    : 10485760 字节（10 MB）
+AI 密钥       : 未配置（上传只做文本提取，不调用模型）
+
+------------------------------------------------------------------------------
+用例执行
+------------------------------------------------------------------------------
+U01 [通过] A1 身份与令牌｜不带令牌上传 a.txt → 401 Not authenticated
+U02 [通过] A1 身份与令牌｜Bearer not-a-jwt 上传 a.txt → 401 Invalid token
+U03 [通过] A1 身份与令牌｜用 login 返回的 refresh_token 上传 a.txt → 401 Invalid token
+U04 [通过] A1 身份与令牌｜HR 令牌上传 a.txt → 201 {'id': '90bfd114-c86a-4197-8bbe-a416a3751f2c', 'title': 'a.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜status=PARSED
+U05 [通过] A1 身份与令牌｜JOB_SEEKER 令牌上传 a.txt → 201 {'id': '44eaf488-2bb6-4318-a157-5e00ac7f7900', 'title': 'a.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜status=PARSED
+U06 [通过] A2 请求体结构｜POST JSON {"file":"x"} → 422 body.file: Field required
+U07 [通过] A2 请求体结构｜字段名用 document 而非 file → 422 body.file: Field required
+U08 [通过] A2 请求体结构｜filename="" 上传内容 hello → 422 body.file: Value error, Expected UploadFile, received: <class 'str'>
+U09 [通过] A3 文件扩展名｜a.txt 文本内容 → 201 {'id': '56bc2549-199e-4092-ad31-7582f042c0f5', 'title': 'a.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}
+U10 [通过] A3 文件扩展名｜a.TXT 文本内容 → 201 {'id': '48e3287c-d463-4f9a-8603-8e1d299aaf24', 'title': 'a.TXT', 'status': 'PARSED', 'message': '文字已识别并保存。'}
+U11 [通过] A3 文件扩展名｜a.md 文本内容 → 201 {'id': '968a97ff-475f-4e2d-811e-e08673a38ab5', 'title': 'a.md', 'status': 'PARSED', 'message': '文字已识别并保存。'}
+U12 [通过] A3 文件扩展名｜a.markdown 文本内容 → 201 {'id': '4318694a-df1d-4911-bba7-b16b77d8e61b', 'title': 'a.markdown', 'status': 'PARSED', 'message': '文字已识别并保存。'}
+U13 [通过] A3 文件扩展名｜ok.pdf → 201 {'id': 'af8dc395-92a6-46a2-873a-cc3dec64889d', 'title': 'ok.pdf', 'status': 'PARSED', 'message': '文字已识别并保存。'}
+U14 [通过] A3 文件扩展名｜ok.docx → 201 {'id': '90036d7a-20af-4db6-a39d-802bfd1b9fca', 'title': 'ok.docx', 'status': 'PARSED', 'message': '文字已识别并保存。'}
+U15 [通过] A3 文件扩展名｜text.png 1400×200 含英文文字 → 201 {'id': 'b7be83bf-0711-48a0-85b7-de4ddd60e5dc', 'title': 'text.png', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜原文长度=25
+U16 [通过] A3 文件扩展名｜blank.jpg 800×120 空白图 → 422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。
+U17 [通过] A3 文件扩展名｜blank.jpeg 800×120 空白图 → 422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。
+U18 [通过] A3 文件扩展名｜blank.webp 800×120 空白图 → 422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。
+U19 [通过] A3 文件扩展名｜blank.bmp 800×120 空白图 → 422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。
+U20 [通过] A3 文件扩展名｜a.doc → 400 Unsupported file type '.doc'. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg
+U21 [通过] A3 文件扩展名｜a.exe → 400 Unsupported file type '.exe'. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg
+U22 [通过] A3 文件扩展名｜a.csv → 400 Unsupported file type '.csv'. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg
+U23 [通过] A3 文件扩展名｜resume（无点号后缀） → 400 Unsupported file type ''. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg
+U24 [通过] A3 文件扩展名｜.txt → 400 Unsupported file type ''. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg
+U25 [通过] A3 文件扩展名｜"a.txt "（末尾一个空格） → 400 Unsupported file type '.txt '. Allowed: .pdf, .webp, .docx, .markdown, .md, .txt, .bmp, .png, .jpeg, .jpg
+U26 [通过] A4 文件大小｜empty.txt 0 字节 → 422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。
+U27 [通过] A4 文件大小｜one.txt 内容 "a" → 201 {'id': 'a212838a-65a0-4556-b06a-7eb64a295849', 'title': 'one.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}
+U28 [通过] A4 文件大小｜space.txt 内容为空格换行制表符 → 422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。
+U29 [通过] A4 文件大小｜exact10m.txt 10 MB → 201 {'id': 'b829326c-dc96-4082-831b-de2f4acd1691', 'title': 'exact10m.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜字节=10485760
+U30 [通过] A4 文件大小｜over10m.txt 10 485 761 字节 → 413 File too large. Maximum size is 10 MB｜字节=10485761
+U31 [通过] A5 文件名｜"n"×251 + ".txt" → 201 {'id': '7cb61b2d-2bf6-476e-8042-01d762f1fcec', 'title': 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn｜标题长度=255
+U32 [通过] A5 文件名｜"n"×252 + ".txt" → 400 Invalid filename
+U33 [通过] A5 文件名｜filename="bad\x01name.txt" → 400 Invalid filename
+U34 [通过] A5 文件名｜"..\\..\\escape.txt" → 201 {'id': '28e01dfa-43fa-45c2-9756-cd2fb5c2b1cf', 'title': 'escape.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜标题=escape.txt；目录外文件=False
+U35 [通过] A5 文件名｜"C:\\Windows\\abs.txt" → 201 {'id': '459fe50a-5044-459c-b48a-3a695904650a', 'title': 'abs.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜标题=abs.txt
+U36 [通过] A5 文件名｜中文简历.txt → 201 {'id': 'c7f9f2da-f9c7-4bae-a706-2f0ca68409ff', 'title': '中文简历.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜标题=中文简历.txt
+U37 [通过] A6 图片内容与像素｜limit.png 空白 → 422 简历解析失败：Failed to parse file: 未识别到文字，请上传清晰、正向且包含完整文字的简历。｜像素=25000000
+U38 [通过] A6 图片内容与像素｜over.png 空白 → 422 简历解析失败：Failed to parse file: 图片分辨率过大，请缩小至 2500 万像素以内。｜像素=25005000
+U39 [通过] A6 图片内容与像素｜broken.jpg 内容为文本 → 422 简历解析失败：Failed to parse file: 图片损坏或文件内容并非有效图片。
+U40 [通过] A6 图片内容与像素｜renamed.png 实为 GIF → 422 简历解析失败：Failed to parse file: 图片格式不受支持。
+U41 [通过] A7 可见后置条件｜上传 visible.txt 后查询简历列表 → 201 {'id': '89d99af6-d465-4eaf-a066-99b8f01f58d3', 'title': 'visible.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜列表命中=True；状态=PARSED
+U42 [通过] A7 可见后置条件｜同一文件名上传两次 → 201 {'id': '7cdf166a-bae6-465e-b6bc-fd1d57e1d945', 'title': 'same.txt', 'status': 'PARSED', 'message': '文字已识别并保存。'}｜同名记录数=2；ID 不同=True
+U43 [通过] A7 可见后置条件｜上传无法解析的 bad.pdf → 422 简历解析失败：Failed to parse file: EOF marker not found｜记录 17→17；文件 18→18
+B01 [通过] B1 用户名长度｜username="ab" → 422 body.username: String should have at least 3 characters
+B02 [通过] B1 用户名长度｜username="b02" → 201 {'id': 'fab5aa36-d978-462f-ac35-e65fa0972f79', 'username': 'b02', 'email': 'b02@bbmail.com', 'role': 'HR', 'is_active':
+B03 [通过] B1 用户名长度｜"u"×50 → 201 {'id': 'e809a77d-bd32-46c3-b451-998d26af9716', 'username': 'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu', 'email'｜用户名长度=50
+B04 [通过] B1 用户名长度｜"u"×51 → 422 body.username: String should have at most 50 characters
+B05 [通过] B2 密码长度｜password="abcde" → 422 body.password: String should have at least 6 characters
+B06 [通过] B2 密码长度｜password="abcdef" → 201 {'id': 'f1ddc15d-09bc-45a4-bcdc-9dcec896c95d', 'username': 'b06user', 'email': 'b06@bbmail.com', 'role': 'HR', 'is_activ
+B07 [通过] B2 密码长度｜"p"×128 → 201 {'id': 'e6d61906-9024-496f-a248-1b740ad86aac', 'username': 'b07user', 'email': 'b07@bbmail.com', 'role': 'HR', 'is_activ｜密码长度=128
+B08 [通过] B2 密码长度｜"p"×129 → 422 body.password: String should have at most 128 characters
+B09 [通过] B3 邮箱格式｜"not-an-email" → 422 body.email: value is not a valid email address: An email address must have an @-sign.
+B10 [通过] B3 邮箱格式｜"b10@" → 422 body.email: value is not a valid email address: There must be something after the @-sign.
+B11 [通过] B4 角色枚举｜role="ADMIN" → 422 body.role: String should match pattern '^(HR|JOB_SEEKER)$'
+B12 [通过] B4 角色枚举｜role="hr" → 422 body.role: String should match pattern '^(HR|JOB_SEEKER)$'
+B13 [通过] B4 角色枚举｜不传 role 字段 → 201 {'id': 'e7c21678-4569-4ada-a461-170293fe7412', 'username': 'b13user', 'email': 'b13@bbmail.com', 'role': 'JOB_SEEKER', '｜role=JOB_SEEKER
+B14 [通过] B5 唯一性｜重复注册同名账号 b14dup → 409 Username already taken
+B15 [通过] B5 唯一性｜两个用户名使用同一邮箱 → 409 Email already registered
+B16 [通过] B6 必填字段｜请求体缺 email 与 password → 422 body.email: Field required；body.password: Field required
+B17 [通过] B7 登录凭证｜用已注册账号登录 → 200 {'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZGZiZjljOS1jMzIzLTRjZTEtYjkwZi1hN2U4MTNlOWYyZDYiLCJle｜token_type=bearer
+B18 [通过] B7 登录凭证｜bb_hr + wrong-password → 401 Invalid username or password
+B19 [通过] B7 登录凭证｜ghost_user + 任意密码 → 401 Invalid username or password
+B20 [通过] B7 登录凭证｜BB_HR + 正确密码 → 401 Invalid username or password
+B21 [通过] B7 登录凭证｜停用后使用正确密码登录 → 403 Account is deactivated
+B22 [通过] B8 登录必填｜{"username":"bb_hr"} → 422 body.password: Field required
+
+------------------------------------------------------------------------------
+覆盖汇总
+------------------------------------------------------------------------------
+U 简历上传：43/43 通过
+B 账号认证：22/22 通过
+  等价类-无效：17/17
+  等价类-有效：17/17
+  错误推测：12/12
+  边界值-无效：3/3
+  边界值-下界：6/6
+  边界值-上界：5/5
+  边界值-越界：5/5
+
+------------------------------------------------------------------------------
+结论
+------------------------------------------------------------------------------
+用例总数 65，通过 65，失败 0，耗时 23.7 秒
+全部用例的观察结果与期望一致。
+
+用例明细已写入：C:\Users\chen2\Downloads\work space 2\黑盒\测试用例.csv
