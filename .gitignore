@@ -5,6 +5,7 @@ frontend/dist/
 frontend/tsconfig.tsbuildinfo
 frontend/.npm-cache/
 .local-run/
+docs/黑盒/_run/
 
 # Python
 backend/.venv/

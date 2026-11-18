@@ -28,7 +28,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
-BACKEND = BASE.parent / "NewRepo-main" / "backend"
+BACKEND = BASE.parent.parent / "backend"
 RUN = BASE / "_run"
 
 # ---------- 隔离运行环境：临时数据库、上传目录、关闭真实 AI ----------
@@ -474,7 +474,7 @@ async def _(api, ctx):
     return status_is(r, 422, "未识别到文字"), observe(r, f"像素={MAX_PIXELS}")
 
 
-@case("U38", "U 简历上传", "A6 图片内容与像素", "边界值-越界", "2500 万 + 1 像素（5000×5001）", "over.png 空白", "422；提示分辨率过大")
+@case("U38", "U 简历上传", "A6 图片内容与像素", "边界值-越界", "2500 万 + 5000 像素（5000×5001）", "over.png 空白", "422；提示分辨率过大")
 async def _(api, ctx):
     r = await api.post(UPLOAD, headers=ctx["hr"], files={"file": ("over.png", png_bytes(size=(5000, 5001)))})
     return status_is(r, 422, "分辨率过大"), observe(r, f"像素={MAX_PIXELS + 5000}")

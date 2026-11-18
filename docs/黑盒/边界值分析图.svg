@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1100" viewBox="0 0 1500 1100">
+  <rect width="1500" height="1100" fill="#fff"/>
+  <g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" fill="#202d3f">
+    <text x="60" y="85" font-size="42" font-weight="700">边界值分析：五项测试结果</text>
+    <text x="60" y="128" font-size="21" fill="#687588">绿色：接受或校验通过　　红色：拒绝　　每个取值下标注用例编号及实际结果</text>
+    <g stroke="#e5eaf0" stroke-width="1">
+      <path d="M60 350H1440 M60 505H1440 M60 660H1440 M60 815H1440"/>
+    </g>
+    <g font-size="27" font-weight="700">
+      <text x="60" y="250">文件大小</text><text x="60" y="405">文件名长度</text>
+      <text x="60" y="560">图片像素</text><text x="60" y="715">用户名长度</text><text x="60" y="870">密码长度</text>
+    </g>
+    <g fill="#758296" font-size="19">
+      <text x="60" y="280">字节</text><text x="60" y="435">字符</text><text x="60" y="590">像素</text>
+      <text x="60" y="745">字符</text><text x="60" y="900">字符</text>
+    </g>
+    <g stroke="#c9d1dc" stroke-width="3"><path d="M465 255H1405 M465 410H1405 M465 565H1405 M465 720H1405 M465 875H1405"/></g>
+    <g text-anchor="middle" font-size="23" font-weight="700">
+      <text x="470" y="225">0</text><text x="775" y="225">1</text><text x="1080" y="225">10 485 760</text><text x="1385" y="225">10 485 761</text>
+      <text x="470" y="380">0（空名）</text><text x="775" y="380">5（a.txt）</text><text x="1080" y="380">255</text><text x="1385" y="380">256</text>
+      <text x="470" y="535">280 000</text><text x="925" y="535">25 000 000</text><text x="1385" y="535">25 005 000</text>
+      <text x="470" y="690">2</text><text x="775" y="690">3</text><text x="1080" y="690">50</text><text x="1385" y="690">51</text>
+      <text x="470" y="845">5</text><text x="775" y="845">6</text><text x="1080" y="845">128</text><text x="1385" y="845">129</text>
+    </g>
+    <g fill="#bd252a"><circle cx="470" cy="255" r="7"/><circle cx="1385" cy="255" r="7"/><circle cx="470" cy="410" r="7"/><circle cx="1385" cy="410" r="7"/><circle cx="1385" cy="565" r="7"/><circle cx="470" cy="720" r="7"/><circle cx="1385" cy="720" r="7"/><circle cx="470" cy="875" r="7"/><circle cx="1385" cy="875" r="7"/></g>
+    <g fill="#078247"><circle cx="775" cy="255" r="7"/><circle cx="1080" cy="255" r="7"/><circle cx="775" cy="410" r="7"/><circle cx="1080" cy="410" r="7"/><circle cx="470" cy="565" r="7"/><circle cx="925" cy="565" r="7"/><circle cx="775" cy="720" r="7"/><circle cx="1080" cy="720" r="7"/><circle cx="775" cy="875" r="7"/><circle cx="1080" cy="875" r="7"/></g>
+    <g text-anchor="middle" font-size="19">
+      <g fill="#bd252a"><text x="470" y="300">U26  422 拒绝</text><text x="1385" y="300">U30  413 拒绝</text><text x="470" y="455">U08  422 拒绝</text><text x="1385" y="455">U32  400 拒绝</text><text x="1385" y="610">U38  422 拒绝</text><text x="470" y="765">B01  422 拒绝</text><text x="1385" y="765">B04  422 拒绝</text><text x="470" y="920">B05  422 拒绝</text><text x="1385" y="920">B08  422 拒绝</text></g>
+      <g fill="#078247"><text x="775" y="300">U27  201 接受</text><text x="1080" y="300">U29  201 接受</text><text x="775" y="455">U09  201 接受</text><text x="1080" y="455">U31  201 接受</text><text x="470" y="610">U15  201 接受</text><text x="925" y="610">U37  像素校验通过</text><text x="775" y="765">B02  201 接受</text><text x="1080" y="765">B03  201 接受</text><text x="775" y="920">B06  201 接受</text><text x="1080" y="920">B07  201 接受</text></g>
+    </g>
+    <g font-size="18" fill="#687588"><text x="60" y="1000">注：横轴仅按取值大小等距排列，不表示比例；文件名最短有效长度未单独测试。</text><text x="60" y="1033">U37 通过像素校验，但空白图片未识别到文字，最终返回 422。</text></g>
+  </g>
+</svg>

@@ -210,14 +210,15 @@ export default function Matches() {
             {matches.map((m) => {
               const resume = resumes.find((r) => r.id === m.resume_id);
               const job = jobs.find((j) => j.id === m.job_id);
+              const displayedScore = m.overall_score == null ? null : Math.round(m.overall_score);
               return (
                 <TableRow key={m.id}>
                   <TableCell className="font-medium">{resume?.title || m.resume_id.slice(0, 8)}</TableCell>
                   <TableCell>{job?.title || m.job_id.slice(0, 8)}</TableCell>
                   <TableCell>
-                    {m.overall_score !== null && m.overall_score !== undefined ? (
-                      <span className={`font-bold text-lg ${getScoreColor(m.overall_score)}`}>
-                        {Math.round(m.overall_score)}
+                    {displayedScore !== null ? (
+                      <span className={`font-bold text-lg ${getScoreColor(displayedScore)}`}>
+                        {displayedScore}
                       </span>
                     ) : (
                       <span className="text-muted-foreground/40">—</span>

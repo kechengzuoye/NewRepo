@@ -2,7 +2,7 @@
  * 匹配分数判级函数 —— 白盒测试脚本
  *
  * 被测对象：前端「匹配分析」页面评分列里的匹配分数判级函数
- *           （NewRepo-main/frontend/src/pages/Matches.tsx 第 91–96 行）
+ *           （frontend/src/pages/Matches.tsx 第 91–96 行）
  *
  * 测试类型：白盒测试。在真实源码的函数体上注入语句 / 判定 / 条件探针，
  *           执行用例后统计语句覆盖、判定覆盖、条件覆盖、路径覆盖，
@@ -22,8 +22,8 @@ import { stripTypeScriptTypes } from 'node:module';
 import { fileURLToPath } from 'node:url';
 
 const 当前目录 = path.dirname(fileURLToPath(import.meta.url));
-const 工作区 = path.resolve(当前目录, '..');
-const 源文件 = path.join(工作区, 'NewRepo-main', 'frontend', 'src', 'pages', 'Matches.tsx');
+const 项目根目录 = path.resolve(当前目录, '..', '..');
+const 源文件 = path.join(项目根目录, 'frontend', 'src', 'pages', 'Matches.tsx');
 const 结果文件 = path.join(当前目录, '执行结果.txt');
 
 // ───────────────────────── 1. 取被测源码 ─────────────────────────
